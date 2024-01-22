@@ -1,0 +1,54 @@
+{% extends 'mailings/mailings_base.html' %}
+
+
+{% block content %}
+    {#    <div class="col-3">#}
+    {#        <form method="post" id="category_filter_form">#}
+    {#            {% csrf_token %}#}
+    {# Category #}
+    {#            <div class="mb-3">#}
+    {#                <label for="product_category" class="form-label">Категория</label>#}
+    {#                <select class="form-select" id="product_category" name="category" form="category_filter_form" required>#}
+    {#                    <option value="0">Все</option>#}
+    {#                    {% for category in categories %}#}
+    {#                        <option value="{{ category.pk }}"#}
+    {#                                {% if category.pk == selected_category_pk %}selected{% endif %}>{{ category.name }}</option>#}
+    {#                    {% endfor %}#}
+    {#                </select>#}
+    {#            </div>#}
+    {#            <input type="submit" value="Фильтровать">#}
+    {#        </form>#}
+    {#    </div>#}
+
+
+    <div class="table-responsive small">
+        <table class="table table-striped table-sm">
+            <thead>
+
+            <tr>
+                <th scope="col">Имя</th>
+                <th scope="col">Периодичность</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for object in object_list %}
+                <p>{{ object.email }}</p>
+                <tr>
+                    <td>{{ object.name }}</td>
+                    <td>{{ object.duration }}</td>
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-2 my-2"><a href="{% url 'mailings:periods_create' %}" class="btn btn-primary">Добавить
+            период</a>
+        </div>
+    </div>
+{% endblock %}

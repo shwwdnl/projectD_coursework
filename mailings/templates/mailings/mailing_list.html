@@ -1,0 +1,381 @@
+{% extends 'mailings/mailings_base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <div class="row g-3 mb-4 align-items-center justify-content-between">
+        <div class="col-auto">
+            <h1 class="app-page-title mb-0">{{ title }}</h1>
+        </div>
+    </div><!--//row-->
+
+
+    <nav id="orders-table-tab" class="orders-table-tab app-nav-tabs nav shadow-sm flex-column flex-sm-row mb-4">
+        <a class="flex-sm-fill text-sm-center nav-link active" id="mailings-all-tab" data-bs-toggle="tab"
+           href="#mailings-all" role="tab" aria-controls="orders-all" aria-selected="true">Все</a>
+
+        <a class="flex-sm-fill text-sm-center nav-link" id="mailings-started-tab" data-bs-toggle="tab"
+           href="#mailings-started"
+           role="tab" aria-controls="mailings-started" aria-selected="false">Запущены</a>
+
+        <a class="flex-sm-fill text-sm-center nav-link" id="mailings-created-tab" data-bs-toggle="tab"
+           href="#mailings-created" role="tab" aria-controls="mailings-created" aria-selected="false">Созданы</a>
+
+        <a class="flex-sm-fill text-sm-center nav-link" id="mailings-finished-tab" data-bs-toggle="tab"
+           href="#mailings-finished" role="tab" aria-controls="mailings-finished" aria-selected="false">Завершены</a>
+    </nav>
+
+
+
+    <div class="tab-content" id="orders-table-tab-content">
+
+        {# All mailings tab #}
+        <div class="tab-pane fade show active" id="mailings-all" role="tabpanel" aria-labelledby="mailings-all-tab">
+            <div class="app-card app-card-orders-table shadow-sm mb-5">
+                <div class="app-card-body">
+                    <div class="table-responsive">
+                        <table class="table app-table-hover mb-0 text-left">
+                            <thead>
+                            <tr>
+                                <th class="cell">ID</th>
+                                <th class="cell">Название</th>
+                                <th class="cell">Периодичность</th>
+                                <th class="cell">Начало</th>
+                                <th class="cell">Завершение</th>
+                                <th class="cell">Статус</th>
+                                <th class="cell">Действия</th>
+                                {#                                <th class="cell"></th>#}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in object_list %}
+                                <tr>
+                                    <td class="cell">{{ object.pk }}</td>
+                                    <td class="cell"><a href="{% url 'mailings:mailing_detail' object.pk %}"><span class="truncate">{{ object.name }}</span></a>
+                                    </td>
+                                    <td class="cell">{{ object.period }}</td>
+                                    <td class="cell"><span>{{ object.start_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.start_time.time }}</span></td>
+                                    <td class="cell"><span>{{ object.end_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.end_time.time }}</span></td>
+                                    <td class="cell"><span class="badge
+                                                {% if object.status == 'started' %}
+													 bg-success
+												{% elif object.status == 'created' %}
+												     bg-warning
+												{% elif object.status == 'finished' %}
+                                                     bg-danger
+												{% endif %} ">{{ object.get_status_display }}</span></td>
+                                    <td class="cell">
+                                        <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_start' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="start"><i
+                                                    class="fa-solid fa-play"
+                                                    style="color: #00f900;"></i></a>
+                                            </li>
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_stop' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="stop"><i
+                                                    class="fa-solid fa-stop"></i></a></li>
+
+                                            {% if perms.mailings.change_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_edit' object.pk %}"
+                                                        class="text-info"
+                                                        data-toggle="tooltip" title="edit"
+                                                        data-original-title="Edit"><i
+                                                        class="fas fa-pencil-alt"></i></a></li>
+                                            {% endif %}
+
+
+                                            {% if perms.mailings.delete_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_delete' object.pk %}"
+                                                        class="text-danger" data-toggle="tooltip" title=""
+                                                        data-original-title="Delete"><i
+                                                        class="fa-solid fa-trash"
+                                                        style="color: #ff4013;"></i></a>
+                                                </li>
+                                            {% endif %}
+
+                                        </ul>
+                                    </td>
+                                    {#                                    <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>#}
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div><!--//table-responsive-->
+
+                </div><!--//app-card-body-->
+            </div><!--//app-card-->
+
+            {% if perms.mailings.add_mailing %}
+                <a href="{% url 'mailings:mailing_create' %}" class="btn btn-success">Добавить рассылку</a>
+            {% endif %}
+            {#            todo: оживить пагинацию#}
+            {#            <nav class="app-pagination">#}
+            {#                <ul class="pagination justify-content-center">#}
+            {#                    <li class="page-item disabled">#}
+            {#                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>#}
+            {#                    </li>#}
+            {#                    <li class="page-item active"><a class="page-link" href="#">1</a></li>#}
+            {#                    <li class="page-item"><a class="page-link" href="#">2</a></li>#}
+            {#                    <li class="page-item"><a class="page-link" href="#">3</a></li>#}
+            {#                    <li class="page-item">#}
+            {#                        <a class="page-link" href="#">Next</a>#}
+            {#                    </li>#}
+            {#                </ul>#}
+            {#            </nav><!--//app-pagination-->#}
+
+        </div><!--//tab-pane-->
+
+        {# Started mailings tab #}
+        <div class="tab-pane fade" id="mailings-started" role="tabpanel" aria-labelledby="mailings-started-tab">
+            <div class="app-card app-card-orders-table mb-5">
+                <div class="app-card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 text-left">
+                            <thead>
+                            <tr>
+                                <th class="cell">ID</th>
+                                <th class="cell">Название</th>
+                                <th class="cell">Периодичность</th>
+                                <th class="cell">Начало</th>
+                                <th class="cell">Завершение</th>
+                                <th class="cell">Статус</th>
+                                <th class="cell">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in started_mailings %}
+                                <tr>
+                                    <td class="cell">{{ object.pk }}</td>
+                                    <td class="cell"><a href="{% url 'mailings:mailing_detail' object.pk %}"><span class="truncate">{{ object.name }}</span></a>
+                                    </td>
+                                    <td class="cell">{{ object.period }}</td>
+                                    <td class="cell"><span>{{ object.start_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.start_time.time }}</span></td>
+                                    <td class="cell"><span>{{ object.end_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.end_time.time }}</span></td>
+                                    <td class="cell"><span class="badge
+                                                {% if object.status == 'started' %}
+													 bg-success
+												{% elif object.status == 'created' %}
+												     bg-warning
+												{% elif object.status == 'finished' %}
+                                                     bg-danger
+												{% endif %} ">{{ object.get_status_display }}</span></td>
+                                    <td class="cell">
+                                        <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_start' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="start"><i
+                                                    class="fa-solid fa-play"
+                                                    style="color: #00f900;"></i></a>
+                                            </li>
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_stop' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="stop"><i
+                                                    class="fa-solid fa-stop"></i></a></li>
+
+
+                                            {% if perms.mailings.change_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_edit' object.pk %}"
+                                                        class="text-info"
+                                                        data-toggle="tooltip" title="edit"
+                                                        data-original-title="Edit"><i
+                                                        class="fas fa-pencil-alt"></i></a></li>
+                                            {% endif %}
+
+
+                                            {% if perms.mailings.delete_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_delete' object.pk %}"
+                                                        class="text-danger" data-toggle="tooltip" title=""
+                                                        data-original-title="Delete"><i
+                                                        class="fa-solid fa-trash"
+                                                        style="color: #ff4013;"></i></a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                    {#                                    <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>#}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!--//table-responsive-->
+                </div><!--//app-card-body-->
+            </div><!--//app-card-->
+        </div><!--//tab-pane-->
+
+        {# Created mailings tab #}
+        <div class="tab-pane fade" id="mailings-created" role="tabpanel" aria-labelledby="orders-pending-tab">
+            <div class="app-card app-card-orders-table mb-5">
+                <div class="app-card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 text-left">
+                            <thead>
+                            <tr>
+                                <th class="cell">ID</th>
+                                <th class="cell">Название</th>
+                                <th class="cell">Периодичность</th>
+                                <th class="cell">Начало</th>
+                                <th class="cell">Завершение</th>
+                                <th class="cell">Статус</th>
+                                <th class="cell">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in created_mailings %}
+                                <tr>
+                                    <td class="cell">{{ object.pk }}</td>
+                                    <td class="cell"><a href="{% url 'mailings:mailing_detail' object.pk %}"><span class="truncate">{{ object.name }}</span></a>
+                                    <td class="cell">{{ object.period }}</td>
+                                    <td class="cell"><span>{{ object.start_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.start_time.time }}</span></td>
+                                    <td class="cell"><span>{{ object.end_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.end_time.time }}</span></td>
+                                    <td class="cell"><span class="badge
+                                                {% if object.status == 'started' %}
+													 bg-success
+												{% elif object.status == 'created' %}
+												     bg-warning
+												{% elif object.status == 'finished' %}
+                                                     bg-danger
+												{% endif %} ">{{ object.get_status_display }}</span></td>
+                                    <td class="cell">
+                                        <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_start' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="start"><i
+                                                    class="fa-solid fa-play"
+                                                    style="color: #00f900;"></i></a>
+                                            </li>
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_stop' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="stop"><i
+                                                    class="fa-solid fa-stop"></i></a></li>
+
+
+                                            {% if perms.mailings.change_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_edit' object.pk %}"
+                                                        class="text-info"
+                                                        data-toggle="tooltip" title="edit"
+                                                        data-original-title="Edit"><i
+                                                        class="fas fa-pencil-alt"></i></a></li>
+                                            {% endif %}
+
+
+                                            {% if perms.mailings.delete_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_delete' object.pk %}"
+                                                        class="text-danger" data-toggle="tooltip" title=""
+                                                        data-original-title="Delete"><i
+                                                        class="fa-solid fa-trash"
+                                                        style="color: #ff4013;"></i></a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                    {#                                    <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>#}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!--//table-responsive-->
+                </div><!--//app-card-body-->
+            </div><!--//app-card-->
+        </div><!--//tab-pane-->
+
+
+        {# Finished mailings tab #}
+        <div class="tab-pane fade" id="mailings-finished" role="tabpanel" aria-labelledby="mailings-finished-tab">
+            <div class="app-card app-card-orders-table mb-5">
+                <div class="app-card-body">
+                    <div class="table-responsive">
+                        <table class="table mb-0 text-left">
+                            <thead>
+                            <tr>
+                                <th class="cell">ID</th>
+                                <th class="cell">Название</th>
+                                <th class="cell">Периодичность</th>
+                                <th class="cell">Начало</th>
+                                <th class="cell">Завершение</th>
+                                <th class="cell">Статус</th>
+                                <th class="cell">Действия</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for object in finished_mailings %}
+                                <tr>
+                                    <td class="cell">{{ object.pk }}</td>
+                                    <td class="cell"><a href="{% url 'mailings:mailing_detail' object.pk %}"><span class="truncate">{{ object.name }}</span></a>
+                                    <td class="cell">{{ object.period }}</td>
+                                    <td class="cell"><span>{{ object.start_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.start_time.time }}</span></td>
+                                    <td class="cell"><span>{{ object.end_time.date|date:'d M' }}</span><span
+                                            class="note">{{ object.end_time.time }}</span></td>
+                                    <td class="cell"><span class="badge
+                                                {% if object.status == 'started' %}
+													 bg-success
+												{% elif object.status == 'created' %}
+												     bg-warning
+												{% elif object.status == 'finished' %}
+                                                     bg-danger
+												{% endif %} ">{{ object.get_status_display }}</span></td>
+                                    <td class="cell">
+                                        <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_start' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="start"><i
+                                                    class="fa-solid fa-play"
+                                                    style="color: #00f900;"></i></a>
+                                            </li>
+                                            <li class="mx-auto"><a href="{% url 'mailings:mailing_stop' object.pk %}"
+                                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                                   data-original-title="stop"><i
+                                                    class="fa-solid fa-stop"></i></a></li>
+
+
+                                            {% if perms.mailings.change_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_edit' object.pk %}"
+                                                        class="text-info"
+                                                        data-toggle="tooltip" title="edit"
+                                                        data-original-title="Edit"><i
+                                                        class="fas fa-pencil-alt"></i></a></li>
+                                            {% endif %}
+
+
+                                            {% if perms.mailings.delete_mailing %}
+                                                <li class="mx-auto"><a
+                                                        href="{% url 'mailings:mailing_delete' object.pk %}"
+                                                        class="text-danger" data-toggle="tooltip" title=""
+                                                        data-original-title="Delete"><i
+                                                        class="fa-solid fa-trash"
+                                                        style="color: #ff4013;"></i></a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </td>
+                                    {#                                    <td class="cell"><a class="btn-sm app-btn-secondary" href="#">View</a></td>#}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div><!--//table-responsive-->
+                </div><!--//app-card-body-->
+            </div><!--//app-card-->
+        </div><!--//tab-pane-->
+    </div><!--//tab-content-->
+
+
+{% endblock %}

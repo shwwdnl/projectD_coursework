@@ -1,0 +1,44 @@
+{% extends 'mailings/mailings_base.html' %}
+{% load media_tags %}
+{% block content %}
+    <h4>{{ title }}</h4>
+
+    <section class="bg-light py-5 py-xl-6">
+        <div class="container overflow-hidden">
+
+            <div class="row gy-5">
+
+                {% for object in object_list %}
+                    <div class="col-12">
+                        <div class="{% cycle "" "flex-row-reverse" %} row align-items-center gy-3 gy-md-0 gx-xl-5">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="img-wrapper position-relative hcf-transform">
+                                    <a href="{% url 'blog:article_detail' object.pk %}">
+                                        <img class="img-fluid rounded w-100 hcf-of-cover hcf-op-center hcf-ih-250 hcf-ih-md-400"
+                                             loading="lazy" src="{% media_path object.preview %}"
+                                             alt="{{ object.title }}">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <div>
+                                    <p class="text-secondary mb-1">{{ object.created_at|timesince }} назад</p>
+                                    <h2 class="h1 mb-3"><a class="link-dark text-decoration-none"
+                                                           href="{% url 'blog:article_detail' object.pk %}">{{ object.title }}</a>
+                                    </h2>
+                                    <p class="mb-4">{{ object.content|truncatechars:100 }}</p>
+                                    <a class="btn btn-secondary" href="{% url 'blog:article_detail' object.pk %}"
+                                       target="_self">Подробнее</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                {% empty %}
+                    <p>Нет публикаций</p>
+                {% endfor %}
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

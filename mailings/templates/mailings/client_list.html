@@ -1,0 +1,79 @@
+{% extends 'mailings/mailings_base.html' %}
+
+
+{% block content %}
+    {#    <div class="col-3">#}
+    {#        <form method="post" id="category_filter_form">#}
+    {#            {% csrf_token %}#}
+    {# Category #}
+    {#            <div class="mb-3">#}
+    {#                <label for="product_category" class="form-label">Категория</label>#}
+    {#                <select class="form-select" id="product_category" name="category" form="category_filter_form" required>#}
+    {#                    <option value="0">Все</option>#}
+    {#                    {% for category in categories %}#}
+    {#                        <option value="{{ category.pk }}"#}
+    {#                                {% if category.pk == selected_category_pk %}selected{% endif %}>{{ category.name }}</option>#}
+    {#                    {% endfor %}#}
+    {#                </select>#}
+    {#            </div>#}
+    {#            <input type="submit" value="Фильтровать">#}
+    {#        </form>#}
+    {#    </div>#}
+
+    <h3>{{ title }}</h3>
+
+    <div class="table-responsive">
+        <table class="table mb-0 text-left">
+            <thead>
+
+            <tr>
+                <th class="cell" scope="col">Имя</th>
+                <th class="cell" scope="col">Email</th>
+                <th class="cell" scope="col">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for object in object_list %}
+                <tr>
+                    <td class="cell">{{ object.full_name }}</td>
+                    <td class="cell">{{ object.email }}</td>
+                    <td class="cell">
+                        <ul class="list-unstyled mb-0 d-flex justify-content-center">
+
+                            {% if perms.mailings.change_mailing %}
+                                <li class="mx-auto"><a
+                                        href="{% url 'mailings:client_edit' object.pk %}"
+                                        class="text-info"
+                                        data-toggle="tooltip" title="edit"
+                                        data-original-title="Edit"><i
+                                        class="fas fa-pencil-alt"></i></a></li>
+                            {% endif %}
+
+
+                            {% if perms.mailings.delete_mailing %}
+                                <li class="mx-auto"><a
+                                        href="{% url 'mailings:client_delete' object.pk %}"
+                                        class="text-danger" data-toggle="tooltip" title=""
+                                        data-original-title="Delete"><i
+                                        class="fa-solid fa-trash"
+                                        style="color: #ff4013;"></i></a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </td>
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-2 my-2"><a href="{% url 'mailings:client_create' %}" class="btn btn-primary">Добавить
+            клиента</a>
+        </div>
+    </div>
+{% endblock %}

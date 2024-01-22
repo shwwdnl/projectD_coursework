@@ -1,0 +1,78 @@
+{% extends 'mailings/mailings_base.html' %}
+
+
+{% block content %}
+    {#    <div class="col-3">#}
+    {#        <form method="post" id="category_filter_form">#}
+    {#            {% csrf_token %}#}
+    {# Category #}
+    {#            <div class="mb-3">#}
+    {#                <label for="product_category" class="form-label">Категория</label>#}
+    {#                <select class="form-select" id="product_category" name="category" form="category_filter_form" required>#}
+    {#                    <option value="0">Все</option>#}
+    {#                    {% for category in categories %}#}
+    {#                        <option value="{{ category.pk }}"#}
+    {#                                {% if category.pk == selected_category_pk %}selected{% endif %}>{{ category.name }}</option>#}
+    {#                    {% endfor %}#}
+    {#                </select>#}
+    {#            </div>#}
+    {#            <input type="submit" value="Фильтровать">#}
+    {#        </form>#}
+    {#    </div>#}
+
+
+    <div class="table-responsive small">
+        <table class="table table-striped table-sm">
+            <thead>
+
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for object in object_list %}
+                <tr>
+                    <td>{{ object.email }}</td>
+                    <td>{{ object.get_full_name }}</td>
+                    <td>{% if object.is_active %}
+                        <i class="fa-solid fa-circle" style="color: #96d35f;"></i>
+                    {% else %}
+                        <i class="fa-solid fa-circle" style="color: #d20000;"></i>
+                    {% endif %} </td>
+                    <td>
+                        <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                            <li class="mx-auto"><a href="{% url 'users:manager_activate_user' object.pk %}"
+                                                   class="text-primary" data-toggle="tooltip" title=""
+                                                   data-original-title="start"><i class="fa-solid fa-play"
+                                                                                  style="color: #00f900;"></i></a></li>
+
+                            {% if perms.users.block_user %}
+                                <li class="mx-auto"><a href="{% url 'users:deactivate_user' uid=object.uid %}"
+                                                       class="text-primary" data-toggle="tooltip" title=""
+                                                       data-original-title="stop"><i class="fa-solid fa-stop"></i></a>
+                                </li>
+                            {% endif %}
+
+{#                            <li class="mx-auto"><a href="{% url 'mailings:mailing_edit' object.pk %}" class="text-info"#}
+{#                                                   data-toggle="tooltip" title="edit" data-original-title="Edit"><i#}
+{#                                    class="fas fa-pencil-alt"></i></a></li>#}
+                            {#                            <li class="mx-auto"><a href="{% url 'mailings:mailing_delete' object.pk %}"#}
+                            {#                                                   class="text-danger" data-toggle="tooltip" title=""#}
+                            {#                                                   data-original-title="Delete"><i class="fa-solid fa-trash"#}
+                            {#                                                                                   style="color: #ff4013;"></i></a></li>#}
+                        </ul>
+                    </td>
+                </tr>
+
+
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

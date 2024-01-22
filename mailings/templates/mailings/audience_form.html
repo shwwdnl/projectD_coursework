@@ -1,0 +1,24 @@
+{% extends 'mailings/mailings_base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="row">
+            <div class="col-6 mx-3 my-3">
+                <h4 class="my-5">Добавить аудиторию</h4>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    {% if object %}
+                        <button class="btn btn-primary" type="submit">Сохранить</button>
+                        {#                        <a href="{% url 'backoffice:delete_article' object.pk %}" class="btn btn-danger">Удалить</a>#}
+                    {% else %}
+                        <button class="btn btn-primary" type="submit">Создать</button>
+                    {% endif %}
+                    <a href="{% url 'mailings:audiences_list' %}" class="btn btn-warning">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

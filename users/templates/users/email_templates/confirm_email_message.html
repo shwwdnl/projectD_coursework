@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подтверждение Email</title>
+</head>
+
+<body style="font-family: Arial, sans-serif;">
+
+    <div style="max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+
+        <h2>Подтверждение Email</h2>
+
+        <p>Уважаемый(ая) {{ user.first_name }} {{ user.last_name }},</p>
+
+        <p>Спасибо за регистрацию на {{ current_site }}. Для завершения регистрации, пожалуйста, нажмите на ссылку ниже, чтобы подтвердить свой адрес электронной почты:</p>
+
+        <p><a href="http://{{ domain }}{% url 'users:activate_user' uid=uid token=token %}" style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: #fff; text-decoration: none; border-radius: 3px;">Подтвердить Email</a></p>
+
+        <p>Если вы не регистрировались на {{ current_site }}, проигнорируйте это письмо.</p>
+
+        <p>Спасибо,</p>
+        <p>Команда {{ current_site }}</p>
+
+    </div>
+
+</body>
+
+</html>

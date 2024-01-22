@@ -1,0 +1,30 @@
+{% extends 'mailings/mailings_base.html' %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="mb-4">{{ object.name }}</h1>
+
+    <div class="card">
+      <div class="card-body">
+        <p class="card-text"><strong>Статус:</strong> {{ object.get_status_display }}</p>
+        <p class="card-text"><strong>Периодичность:</strong> {{ object.period }}</p>
+        <p class="card-text"><strong>Аудитория:</strong> {{ object.audience }}</p>
+        <p class="card-text"><strong>Время начала:</strong> {{ object.start_time }}</p>
+        <p class="card-text"><strong>Время окончания:</strong> {{ object.end_time }}</p>
+        <p class="card-text"><strong>Заголовок:</strong> {{ object.message_title }}</p>
+        <p class="card-text"><strong>Текст рассылки:</strong> {{ object.message_body }}</p>
+        <p class="card-text"><strong>Создатель:</strong> {{ object.creator }}</p>
+      </div>
+    </div>
+
+    {% if perms.app_label.stop_mailing %}
+      <a href="{% url 'mailings:mailing_stop' pk=object.pk %}" class="btn btn-danger mt-3">Остановить рассылку</a>
+    {% endif %}
+      <a href="{% url 'mailings:mailings_list' %}" class="btn btn-primary mt-3">Назад</a>
+
+  </div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'mailings/mailings_base.html' %}
+{% load media_tags %}
+{% block body %}
+    <main class="container">
+        <div class="col-md-8 my-5">
+            <article class="blog-post">
+                <h5 class="link-body-emphasis mb-1">{{ object.title }}</h5>
+                <p class="blog-post-meta">{{ object.created_at }}</p>
+                <p class="blog-post-meta">{{ object.slug }}</p>
+                <img class="card-img-top img-fluid mb-4" src="{% media_path object.preview %}" alt="{{ object.title }}">
+                <p>{{ object.content }}</p>
+                <div class="col-2 table-group-divider">
+                </div>
+                <p class="blog-post-meta">Просмотров: {{ object.views_count }}</p>
+            </article>
+
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-secondary">Назад к статьям</a>
+        </div>
+    </main>
+{% endblock %}

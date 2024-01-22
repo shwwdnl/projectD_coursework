@@ -1,0 +1,273 @@
+{% extends 'mailings/base.html' %}
+{% load static %}
+
+{% block body %}
+    <head>
+        <script src="{% static 'js/color-modes.js' %}"></script>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+        <meta name="generator" content="Hugo 0.118.2">
+        <title>{{ title }}</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
+
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                user-select: none;
+            }
+
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
+
+            .b-example-divider {
+                width: 100%;
+                height: 3rem;
+                background-color: rgba(0, 0, 0, .1);
+                border: solid rgba(0, 0, 0, .15);
+                border-width: 1px 0;
+                box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+            }
+
+            .b-example-vr {
+                flex-shrink: 0;
+                width: 1.5rem;
+                height: 100vh;
+            }
+
+            .bi {
+                vertical-align: -.125em;
+                fill: currentColor;
+            }
+
+            .nav-scroller {
+                position: relative;
+                z-index: 2;
+                height: 2.75rem;
+                overflow-y: hidden;
+            }
+
+            .nav-scroller .nav {
+                display: flex;
+                flex-wrap: nowrap;
+                padding-bottom: 1rem;
+                margin-top: -1px;
+                overflow-x: auto;
+                text-align: center;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .btn-bd-primary {
+                --bd-violet-bg: #712cf9;
+                --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+                --bs-btn-font-weight: 600;
+                --bs-btn-color: var(--bs-white);
+                --bs-btn-bg: var(--bd-violet-bg);
+                --bs-btn-border-color: var(--bd-violet-bg);
+                --bs-btn-hover-color: var(--bs-white);
+                --bs-btn-hover-bg: #6528e0;
+                --bs-btn-hover-border-color: #6528e0;
+                --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+                --bs-btn-active-color: var(--bs-btn-hover-color);
+                --bs-btn-active-bg: #5a23c8;
+                --bs-btn-active-border-color: #5a23c8;
+            }
+
+            .bd-mode-toggle {
+                z-index: 1500;
+            }
+
+            .bd-mode-toggle .dropdown-menu .active .bi {
+                display: block !important;
+            }
+        </style>
+
+        <!-- Custom styles for this template -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+        <link href="{% static 'css/sidebars.css' %}" rel="stylesheet">
+
+    </head>
+    <body>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
+                     aria-labelledby="sidebarMenuLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="sidebarMenuLabel">Company name</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                data-bs-target="#sidebarMenu" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2"
+                                   href="{% url 'mailings:mailings_list' %}">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                    {% if nbar == 'mailings' %}
+                                        <strong style="text-decoration: underline">Рассылки</strong>
+                                    {% else %}
+                                        Рассылки
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2"
+                                   href="{% url 'mailings:client_list' %}">
+                                    <i class="fa-solid fa-user"></i>
+                                    {% if nbar == 'clients' %}
+                                        <strong style="text-decoration: underline">Клиенты</strong>
+                                    {% else %}
+                                        Клиенты
+                                    {% endif %}
+
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2" aria-current="page"
+                                   href="{% url 'mailings:audiences_list' %}">
+                                    <i class="fa-solid fa-users fa-xs"></i>
+                                    {% if nbar == 'audiences' %}
+                                        <strong style="text-decoration: underline">Аудитории</strong>
+                                    {% else %}
+                                        Аудитории
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2"
+                                   href="{% url 'mailings:periods_list' %}">
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                    {% if nbar == 'periods' %}
+                                        <strong style="text-decoration: underline">Периоды</strong>
+                                    {% else %}
+                                        Периоды
+                                    {% endif %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2"
+                                   href="{% url 'mailings:mailing_log_list' %}">
+                                    <i class="fa-solid fa-file-code"></i>
+                                    {% if nbar == 'logs' %}
+                                        <strong style="text-decoration: underline">Логи</strong>
+                                    {% else %}
+                                        Логи
+                                    {% endif %}
+                                </a>
+                            </li>
+
+                            {% if perms.users.view_user %}
+                            	<li class="nav-item">
+                                <a class="nav-link d-flex align-items-center gap-2"
+                                   href="{% url 'users:users_list' %}">
+                                    <i class="fa-solid fa-user-tie"></i>
+                                    {% if nbar == 'users' %}
+                                        <strong style="text-decoration: underline">Пользователи</strong>
+                                    {% else %}
+                                        Пользователи
+                                    {% endif %}
+                                </a>
+                            </li>
+                            {% endif %}
+
+                        </ul>
+
+                        <hr class="my-3">
+
+                        <div class="dropdown mx-2">
+                            {% if user.is_authenticated %}
+                                <a href="#"
+                                   class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user-circle fa-xl mx-1"></i>
+                                    <strong>{{ user.email }}</strong>
+                                </a>
+                                <ul class="dropdown-menu text-small shadow show" style="">
+                                    <li><a class="dropdown-item" href="#">New project...</a></li>
+                                    <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="{% url 'users:logout' %}">Выйти</a></li>
+                                </ul>
+                            {% else %}
+                                <i class="fa fa-user-circle fa-xl mx-1"></i>
+                                <a href="{% url 'users:login' %}">Войти</a>
+                            {% endif %}
+
+                        </div>
+
+                        {#                                                <ul class="nav flex-column mb-auto">#}
+                        {#                                                    <li class="nav-item">#}
+                        {#                                                        <a class="nav-link d-flex align-items-center gap-2" href="#">#}
+                        {#                                                            <svg class="bi">#}
+                        {#                                                                <use xlink:href="#gear-wide-connected"/>#}
+                        {#                                                            </svg>#}
+                        {#                                                            Settings#}
+                        {#                                                        </a>#}
+                        {#                                                    </li>#}
+                        {#                                                    <li class="nav-item">#}
+                        {#                                                        <a class="nav-link d-flex align-items-center gap-2" href="#">#}
+                        {#                                                            <svg class="bi">#}
+                        {#                                                                <use xlink:href="#door-closed"/>#}
+                        {#                                                            </svg>#}
+                        {#                                                            Sign out#}
+                        {#                                                        </a>#}
+                        {#                                                    </li>#}
+                        {#                                                </ul>#}
+                    </div>
+                </div>
+            </div>
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">{{ title }}</h1>
+                    {#                    <div class="btn-toolbar mb-2 mb-md-0">#}
+                    {#                        <div class="btn-group me-2">#}
+                    {#                            <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>#}
+                    {#                            <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>#}
+                    {#                        </div>#}
+                    {#                        <button type="button"#}
+                    {#                                class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1">#}
+                    {#                            <svg class="bi">#}
+                    {#                                <use xlink:href="#calendar3"/>#}
+                    {#                            </svg>#}
+                    {#                            This week#}
+                    {#                        </button>#}
+                    {#                    </div>#}
+                </div>
+
+
+                {#                <h4>Товары</h4>#}
+
+                {% block content %}
+                {% endblock %}
+
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
+            integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"
+            crossorigin="anonymous"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    </body>
+
+{% endblock %}

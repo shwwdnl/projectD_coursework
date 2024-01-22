@@ -1,0 +1,20 @@
+<div class="offcanvas-body">
+    <ul class="navbar-nav flex-grow-1 justify-content-between">
+        <li class="nav-item"><a class="nav-link" href="#">
+            <svg class="bi" width="24" height="24">
+                <use xlink:href="#aperture"></use>
+            </svg>
+        </a></li>
+        <li class="nav-item"><a class="nav-link {% if nbar == 'mailings' %}active{% endif %}"
+                                href="{% url 'mailings:mailings_list' %}">Рассылки</a></li>
+        <li class="nav-item"><a class="nav-link disabled" href="#">Каталог</a></li>
+        <li class="nav-item"><a class="nav-link disabled" href="#">О нас</a></li>
+        {#                    <li class="nav-item"><a class="nav-link" href="#">Enterprise</a></li>#}
+        <li class="nav-item"><a class="nav-link {% if nbar == 'blog' %}active{% endif %}"
+                                href="#">Блог</a></li>
+        <li class="nav-item"><a class="nav-link {% if nbar == 'contacts' %}active{% endif %}"
+                                href="#">Контакты</a></li>
+        <li class="nav-item"><a class="nav-link {% if nbar == 'backoffice' %}active{% endif %}"
+                                href="#">Панель управления</a></li>
+    </ul>
+</div>
